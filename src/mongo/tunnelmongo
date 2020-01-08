@@ -1,7 +1,8 @@
 #!/bin/bash
 
-. $(dirname $BASH_SOURCE)/../general/boilerplate.sh
-. $(dirname $BASH_SOURCE)/../ssh/ssh.sh
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+. ${rootdir}/../ssh/ssh.sh
 
 mongo_cfg=$1
 
