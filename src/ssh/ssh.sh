@@ -1,15 +1,15 @@
 portforward() {
-  local local_port=$1
-  local forward_host=$2
-  local forward_port=$3
-  local local_connect_cmd="${@:4}"
+  local ssh_connect_cmd=$1
+  local local_port=$2
+  local forward_host=$3
+  local forward_port=$4
+  local local_connect_cmd="${@:5}"
 
-  source ~/.config/ssh.cfg #for ssh config such as ssh_identity_file
   local logfile=~/tmp/ssh.log
 
-  echo "port forwarding localhost:$local_port to ${forward_host}:${forward_port} via ${ssh_host}:${ssh_port}" >&2
+  echo "port forwarding localhost:$local_port to ${forward_host}:${forward_port}" >&2
   local connected=ready
-  ssh -i $ssh_identity_file -p $ssh_port ${ssh_user}@${ssh_host} -tt -L ${local_port}:${forward_host}:${forward_port} "echo ${connected}; bash -l" >  ${logfile} 2>&1 &
+  $ssh_connect_cmd -tt -L ${local_port}:${forward_host}:${forward_port} "echo ${connected}; bash -l" >  ${logfile} 2>&1 &
 
   local ssh_pid
   ssh_pid=`echo $!`

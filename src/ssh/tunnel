@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+. ${rootdir}/tunnel.sh
+
+tunnel "$@"
