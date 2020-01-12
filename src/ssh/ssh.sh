@@ -15,10 +15,11 @@ portforward() {
   ssh_pid=`echo $!`
   echo "ssh pid ${ssh_pid}" >&2
   cleanup() {
+    local ssh_pid=$1
     echo "terminating ssh process ${ssh_pid}" >&2
     kill "${ssh_pid}"
   }
-  trap cleanup EXIT
+  trap "cleanup $ssh_pid" EXIT
 
   echo "waiting for ssh client to connect..." >&2
   until grep ${connected} ${logfile} >/dev/null
