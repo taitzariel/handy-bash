@@ -5,7 +5,7 @@ ssh_cfg=~/.config/ssh.cfg
 
 usage() {
     programname=$(basename $1)
-    echo "Usage: $programname local_port remote_host remote_port command"
+    echo "Usage: $programname remote_host remote_port command"
     echo "       $programname --ssh-cmd FILE"
     echo "Run a local command with ssh port forwarding."
 }
