@@ -23,19 +23,5 @@ portforward() {
   done
   log "connected to ssh server"
 
-  log "running:"
-  log "$local_connect_cmd"
-  $local_connect_cmd
-}
-
-cleanuptrap() {
-  local pid
-  pid=`echo $!`
-  log "trapping process ${pid}"
-  cleanup() {
-    local pid=$1
-    log "terminating process ${pid}"
-    kill "${pid}"
-  }
-  trap "cleanup $pid" EXIT
+  verboserun "$local_connect_cmd"
 }
