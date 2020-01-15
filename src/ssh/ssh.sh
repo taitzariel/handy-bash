@@ -1,3 +1,6 @@
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/common.sh
+
 portforward() {
   local ssh_connect_cmd=$1
   local local_port=$2
@@ -7,31 +10,31 @@ portforward() {
 
   local logfile=~/tmp/ssh.log
 
-  echo "port forwarding localhost:$local_port to ${forward_host}:${forward_port}" >&2
+  log "port forwarding localhost:$local_port to ${forward_host}:${forward_port}"
   local connected=ready
   $ssh_connect_cmd -tt -L ${local_port}:${forward_host}:${forward_port} "echo ${connected}; bash -l" >  ${logfile} 2>&1 &
 
   cleanuptrap
 
-  echo "waiting for ssh client to connect..." >&2
+  log "waiting for ssh client to connect..."
   until grep ${connected} ${logfile} >/dev/null
   do
     sleep .5
   done
-  echo "connected to ssh server" >&2
+  log "connected to ssh server"
 
-  echo "running:" >&2
-  echo "$local_connect_cmd" >&2
+  log "running:"
+  log "$local_connect_cmd"
   $local_connect_cmd
 }
 
 cleanuptrap() {
   local pid
   pid=`echo $!`
-  echo "trapping process ${pid}" >&2
+  log "trapping process ${pid}"
   cleanup() {
     local pid=$1
-    echo "terminating process ${pid}" >&2
+    log "terminating process ${pid}"
     kill "${pid}"
   }
   trap "cleanup $pid" EXIT
