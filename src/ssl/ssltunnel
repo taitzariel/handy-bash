@@ -4,4 +4,25 @@ rootdir=`dirname "$(readlink -f "$0")"`
 . ${rootdir}/../general/boilerplate.sh
 . ${rootdir}/ssl.sh
 
-sslencrypt "$@"
+usage() {
+  programname=$(basename $1)
+  echo "Usage: $programname ssl_host ssl_port command"
+  echo "  Wrap a command with ssl encryption."
+  echo
+  echo "  Arguments:"
+  echo "    command      should contain the string literal '\$port'; for example:"
+  echo "                   $programname example.com 6379 redis-cli -c -p '\$port'"
+}
+
+ssltunnel() {
+  if [ $# == 1 ] && ([[ $1 == "--help" ||  $1 == "-h" ]]); then
+    usage $0
+  elif (( $# >= 3 )); then
+    sslencrypt "$@"
+  else
+    usage $0
+    exit 1
+  fi
+}
+
+ssltunnel "$@"
