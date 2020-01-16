@@ -19,10 +19,7 @@ sslencrypt() {
   cleanuptrap $pid
  
   log "waiting for stunnel to initialize..."
-  until grep 'Cron thread initialized' ${logfile} >/dev/null
-  do
-    sleep .5
-  done
+  wait_for_file_to_contain 'Cron thread initialized' ${logfile}
   log "stunnel ready"
 
   local port=$listen_port #cmd should contain $port

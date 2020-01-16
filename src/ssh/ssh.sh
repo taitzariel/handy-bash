@@ -20,10 +20,7 @@ portforward() {
   cleanuptrap $pid
 
   log "waiting for ssh client to connect..."
-  until grep ${connected} ${logfile} >/dev/null
-  do
-    sleep .5
-  done
+  wait_for_file_to_contain ${connected} ${logfile}
   log "connected to ssh server"
 
   local port=$listen_port #cmd should contain $port

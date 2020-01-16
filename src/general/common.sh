@@ -23,3 +23,12 @@ cleanuptrap() {
 find_free_port() {
   echo $(python -c 'import socket; s=socket.socket(); s.bind(("", 0)); print(s.getsockname()[1]); s.close()');
 }
+
+wait_for_file_to_contain() {
+  local search_pattern=$1
+  local filename=$2
+  until grep "${search_pattern}" ${filename} >/dev/null
+  do
+    sleep .5
+  done
+}
