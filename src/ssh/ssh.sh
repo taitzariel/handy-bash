@@ -26,6 +26,6 @@ portforward() {
   done
   log "connected to ssh server"
 
-  port=$listen_port #cmd should contain $port
+  local port=$listen_port #cmd should contain $port
   verboserun "$local_connect_cmd"
 }
