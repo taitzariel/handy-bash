@@ -7,10 +7,18 @@ rootdir=`dirname "$(readlink -f "$0")"`
 ssh_cfg=~/.config/ssh.cfg
 
 usage() {
-    programname=$(basename $1)
-    echo "Usage: $programname remote_host remote_port command"
-    echo "       $programname --ssh-cmd FILE"
-    echo "Run a local command with ssh port forwarding."
+  programname=$(basename $1)
+  echo "Usage: $programname remote_host remote_port command"
+  echo "       $programname --ssh-cmd FILE"
+  echo "  Run a local command with ssh port forwarding."
+  echo
+  echo "  Options:"
+  echo "    --ssh-cmd FILE     set the ssh server connection command to the content of"
+  echo "                         the single lined FILE; example content:"
+  echo "                         ssh -i cert.pem user@host"
+  echo "  Arguments:"
+  echo "    command            should contain the string literal '\$port'; for example:"
+  echo "                         tunnel example.com 6379 redis-cli -c -p '\$port'"
 }
 
 tunnel() {
