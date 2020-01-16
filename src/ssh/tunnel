@@ -8,11 +8,12 @@ ssh_cfg=~/.config/ssh.cfg
 
 usage() {
   programname=$(basename $1)
-  echo "Usage: $programname remote_host remote_port command"
+  echo "Usage: $programname [--ssl] remote_host remote_port command"
   echo "       $programname --ssh-cmd FILE"
   echo "  Run a command locally with ssh port forwarding."
   echo
   echo "  Options:"
+  echo "    --ssl              wrap the remote connection with ssl encryption"
   echo "    --ssh-cmd FILE     set the ssh server connection command to the content of"
   echo "                         the single lined FILE; example content:"
   echo "                         ssh -i cert.pem user@host"
@@ -26,6 +27,11 @@ tunnel() {
     usage $0
   elif [ $# == 2 ] && [[ ( $1 == "--ssh-cmd" ) ]]; then
     set_ssh_cmd $2
+  elif (( $# >= 4 )) && [ $1 == "--ssl" ]; then
+    local ssh_connect_cmd=`cat $ssh_cfg`
+    local local_cmd=("${@:4}")
+    quote_port local_cmd
+    portforward "$ssh_connect_cmd" $2 $3 ssltunnel localhost '$port' "${local_cmd[@]}"
   elif (( $# >= 3 )); then
     local ssh_connect_cmd=`cat $ssh_cfg`
     portforward "$ssh_connect_cmd" "$@"
@@ -33,6 +39,16 @@ tunnel() {
     usage $0
     exit 1
   fi
+}
+
+quote_port(){
+  local -n cmd=$1
+  length=${#cmd[@]}
+  for (( i=0; i<${length}; i++ )); do
+    if [ ${cmd[i]} == "\$port" ]; then
+      cmd[i]="'"'$port'"'"
+    fi
+  done
 }
 
 set_ssh_cmd() {
