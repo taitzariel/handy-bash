@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+
+usage() {
+  programname=$(basename $1)
+  echo "Usage: $programname regexp replacement"
+  echo "  Recursively search for regexp in current directory and replace with"
+  echo "  replacement."
+}
+
+replace() {
+  if [ $# == 1 ] && ([[ $1 == "--help" ||  $1 == "-h" ]]); then
+    usage $0
+  elif [ $# == 2 ]; then
+    local regexp=$1
+    local replacement=$2
+    local tmpfile=/tmp/foo
+    for i in `grep -r "$regexp" -l`; do
+      cat $i | sed "s/$regexp/$replacement/g" > $tmpfile
+      mv $tmpfile $i
+    done
+  else
+    usage $0
+    exit 1
+  fi
+}
+
+replace "$@"
