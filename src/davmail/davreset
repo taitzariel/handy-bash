@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+. ${rootdir}/../general/common.sh
+
+davmail_delete_token() {
+  local propfile=~/.davmail.properties
+  local tmpfile=/tmp/davmail.properties
+  cat ${propfile} | grep -v 'davmail.oauth.212562162@ge.com.refreshToken' > ${tmpfile}
+  mv ${tmpfile} ${propfile}
+}
+
+davreset() {
+  local pid=$(pgrep -f davmail.DavGateway)
+  if [[ $pid ]]; then
+    kill_and_wait $pid
+  else
+    log "davmail not running"
+  fi
+  davmail_delete_token
+  davmail >/dev/null 2>&1 & disown
+}
+
+davreset

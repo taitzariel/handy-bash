@@ -32,3 +32,14 @@ wait_for_file_to_contain() {
     sleep .5
   done
 }
+
+kill_and_wait() {
+  local pid=$1
+  log "killing process $pid"
+  if kill $pid; then
+    log "waiting for $pid to terminate"
+    while ps -p $pid >/dev/null; do
+      sleep .1
+    done
+  fi
+}
