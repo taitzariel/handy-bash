@@ -21,6 +21,7 @@ sslencrypt() {
   log "waiting for stunnel to initialize..."
   wait_for_file_to_contain 'Cron thread initialized' ${logfile}
   log "stunnel ready"
+  wait_for_port_to_listen $listen_port
 
   local port=$listen_port #cmd should contain $port
   verboserun "$local_connect_cmd"

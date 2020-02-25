@@ -43,3 +43,11 @@ kill_and_wait() {
     done
   fi
 }
+
+wait_for_port_to_listen() {
+  local port=$1
+  log "waiting for port $port to be listened on"
+  while netstat -lnt | awk '$4 ~ /:'$port'$/ {exit 1}'; do
+    sleep .5
+  done
+}
