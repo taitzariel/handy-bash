@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#adapted from https://askubuntu.com/questions/1168293/redirect-an-external-ip-to-localhost
+
+EXTERNAL_IP=169.254.169.254
+
+view() {
+  sudo iptables -t nat -L -n -v
+}
+
+update() {
+  sudo iptables -t nat -A OUTPUT -d ${EXTERNAL_IP} -j DNAT --to-destination 127.0.0.1
+}
+
+restore() {
+  sudo iptables -t nat -D OUTPUT -d ${EXTERNAL_IP} -j DNAT --to-destination 127.0.0.1 #note -A was replaced by -D
+}
+
+usage() {
+  programname=$(basename $1)
+  echo "Usage: $programname {view|update|restore}"
+  echo "  CRUD operations on iptables to facilitate ssh port forwarding to ec2 instance containing aws credentials."
+  echo
+  echo "  Arguments:"
+  echo "    view               view current iptables settings"
+  echo "    update             update iptables settings"
+  echo "    restore            restore iptables settings"
+}
+
+main() {
+  if [ $# == 1 ]; then
+    if [[ $1 == "--help" ||  $1 == "-h" ]]; then
+      usage $0
+    elif [[ $1 == "view" ||  $1 == "update" || $1 == "restore" ]]; then
+      "$1"
+    else
+      echo "unknown option: $1" >&2
+      exit 1
+    fi
+  else
+    usage $0
+    exit 1
+  fi
+}
+
+main "$@"
