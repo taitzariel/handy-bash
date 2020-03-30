@@ -1,0 +1,2 @@
+#!/bin/bash
+/home/taitz/.go/bin/pacproxy -c /home/taitz/rare/proxy/pac.pac -l 0.0.0.0:9999
