@@ -1,0 +1,16 @@
+#!/bin/bash
+
+connect() {
+  url=$1
+  filter=$2
+
+  out=$(curl $url 2>&1)
+  echo "$url:"
+  if (echo "$out" | grep -q $filter); then
+    echo "  connection successful"
+  else
+    echo "$out" | sed 's/^/  /'
+  fi
+}
+
+connect example.com h1
