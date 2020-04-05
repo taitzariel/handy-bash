@@ -1,4 +1,4 @@
-#!/bin/echo please source
+#!/bin/bash
 
 port=1234
 browser=chromium-browser
