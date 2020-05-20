@@ -1,7 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+
+#default options
 port=1234
 browser=chromium-browser
+
+#override above options from conf file
+. ${rootdir}/remotebrowsed.conf
 
 listen_and_open_in_browser() {
   nc -l $port | while read line; do
