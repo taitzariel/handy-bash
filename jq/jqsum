@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+
+rootdir=`dirname "$(readlink -f "$0")"`
+. ${rootdir}/../general/boilerplate.sh
+
+#print summary of json node - line length by key / element
+
+jqdictsum() {
+  local target="$1"
+  local keys=`eval "${target}"\|keys[]\" -r`
+  for i in $keys; do
+    echo `eval "${target}"."$i"\" | wc -l` $i
+  done | sort -n
+}
+
+jqarraysum() {
+  local target="$1"
+  local length=`eval "${target}"\|length\"`
+  for ((i=0; i<$length; i++)); do
+    echo -n "$i	"
+    eval "${target}"[$i]\" | wc -l
+  done
+}
+
+jqtype() {
+  local target="$1"
+  local jtype=`eval "${target}"\|type\" -r`
+  echo $jtype
+}
+
+jqsum() {
+  local target="$1"
+  local jtype=$(jqtype "$1")
+  if [ $jtype = "object" ]; then
+    jqdictsum "$1"
+  elif [ $jtype = "array" ]; then
+    jqarraysum "$1"
+  else
+    echo "unsupported json type $jtype"
+  fi
+}
+
+jqsum "$1"
+
+
+# example usage:
+
+# ./jqsum 'cat Pipeline-CloudEndureMG.template.json | jq ".Resources.PipelineC660917D.Properties'
+
+# 1 BindleGuid
+# 1 Blockers
+# 1 Description
+# 1 ManualApproval
+# 1 Name
+# 1 PipelineId
+# 1 TrackingVersionSet
+# 1 VersionSetName
+# 26 Packages
+# 1555 PipelineStages
+# 1651 Workflows
