@@ -1,5 +1,5 @@
 #!/bin/bash
 
 # move to trash
-mv -t /home/taitz/.local/share/Trash/files --backup=t $1
-echo $1 moved to trash
+mv -t ~/.local/share/Trash/files --backup=t "$@"
+echo "$@ moved to trash"
