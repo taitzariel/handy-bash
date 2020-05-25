@@ -1,9 +1,0 @@
-alias dunice='du -h --max-depth=1 | sort -h'
-alias o='xdg-open'
-
-jwt() { cut -d'.' -f"$1" | base64 -d 2>/dev/null | jq ;}
-psg() { ps -ef | grep -v grep | grep -i "$1" ;}
-
-export PYTHONSTARTUP=~/.pythonrc
-
-stty -ixon #to enable ctrl-s to navigate backwards in ctr-r cmd search
