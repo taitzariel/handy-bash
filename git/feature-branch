@@ -1,0 +1,40 @@
+#!/bin/bash
+
+parent_dir=$1
+feature=$2
+base=mainline
+start_pref=begin
+username_pref=taitza
+
+checkout_cmds=(
+    "git co ${base}"
+    "git branch ${start_pref}/${feature}"
+    "git branch ${username_pref}/${feature}"
+    # don't co -b because want co to succeed even in branch already exists
+    "git co ${username_pref}/${feature}"
+)
+
+cleanup_cmds=(
+    "git co ${base}"
+    "git branch -d ${start_pref}/${feature}"
+    "git branch -d ${username_pref}/${feature}"
+)
+
+foreachcmd() {
+    local cmds=("$@")
+    for cmd in "${cmds[@]}"; do
+        echo $cmd
+        recursive ${parent_dir} $cmd
+    done
+}
+
+checkout() {
+    foreachcmd "${checkout_cmds[@]}"
+}
+
+cleanup() {
+    foreachcmd "${cleanup_cmds[@]}"
+}
+
+#checkout
+cleanup
