@@ -1,0 +1,13 @@
+#!/bin/bash
+
+recursive() {
+    local parent_dir=`realpath $1`
+    local cmd="${@:2}"
+    for subdir in `ls -d ${parent_dir}/*/`; do
+        echo $subdir >&2
+        cd $subdir
+        $cmd
+    done
+}
+
+recursive "$@"
