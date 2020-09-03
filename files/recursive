@@ -9,7 +9,11 @@ recursive() {
     for subdir in `ls -d ${parent_dir}/*/`; do
         echo $subdir >&2
         cd $subdir
-        $cmd || echo "failed to perform $cmd" >&2
+        if [ -z ${PARALLEL+abc} ]; then
+            $cmd || echo "failed to perform $cmd" >&2
+        else
+            $cmd &
+        fi
     done
 }
 
