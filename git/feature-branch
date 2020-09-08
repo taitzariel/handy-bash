@@ -6,12 +6,21 @@ rootdir=`dirname "$(readlink -f "$0")"`
 base=mainline
 start_pref=begin
 username_pref=taitza
+remote_repo=share
 
 foreachcmd() {
     local cmds=("$@")
     for cmd in "${cmds[@]}"; do
         echo $cmd
         recursive ${parent_dir} $cmd || echo "failed: $cmd" >&2
+    done
+}
+
+foreachcmdparallel() {
+    local cmds=("$@")
+    for cmd in "${cmds[@]}"; do
+        echo $cmd
+        PARALLEL=true recursive ${parent_dir} $cmd
     done
 }
 
@@ -23,7 +32,11 @@ checkout() {
         # don't co -b because want co to succeed even in branch already exists
         "git co ${username_pref}/${feature}"
     )
+    local parallel_checkout_cmds=(
+        "git push ${remote_repo}"
+    )
     foreachcmd "${checkout_cmds[@]}"
+    foreachcmdparallel "${parallel_checkout_cmds[@]}"
 }
 
 cleanup() {
@@ -32,7 +45,12 @@ cleanup() {
       "git branch -d ${start_pref}/${feature}"
       "git branch -d ${username_pref}/${feature}"
     )
+    local parallel_checkout_cmds=(
+        "git push -d ${remote_repo} ${start_pref}/${feature}"
+        "git push -d ${remote_repo} ${username_pref}/${feature}"
+    )
     foreachcmd "${cleanup_cmds[@]}"
+    foreachcmdparallel "${parallel_checkout_cmds[@]}"
 }
 
 usage() {
