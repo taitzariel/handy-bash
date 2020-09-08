@@ -27,7 +27,7 @@ foreachcmdparallel() {
 checkout() {
     local checkout_cmds=(
         "git co ${base}"
-        "git tag ${start_pref}/${feature}"
+        "git branch ${start_pref}/${feature}"
         "git branch ${username_pref}/${feature}"
         # don't co -b because want co to succeed even in branch already exists
         "git co ${username_pref}/${feature}"
@@ -42,6 +42,7 @@ checkout() {
 cleanup() {
     local cleanup_cmds=(
       "git co ${base}"
+      "git branch -d ${start_pref}/${feature}"
       "git branch -d ${username_pref}/${feature}"
     )
     local parallel_cleanup_cmds=(
