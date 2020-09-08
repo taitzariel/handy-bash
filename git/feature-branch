@@ -33,7 +33,7 @@ checkout() {
         "git co ${username_pref}/${feature}"
     )
     local parallel_checkout_cmds=(
-        "git push ${remote_repo}"
+        "git push --set-upstream ${remote_repo} ${username_pref}/${feature}"
     )
     foreachcmd "${checkout_cmds[@]}"
     foreachcmdparallel "${parallel_checkout_cmds[@]}"
