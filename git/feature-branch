@@ -47,6 +47,7 @@ cleanup() {
     )
     local parallel_cleanup_cmds=(
         "git push -d ${remote_repo} ${username_pref}/${feature}"
+        "git push -d ${remote_repo} ${start_pref}/${feature}"
     )
     foreachcmd "${cleanup_cmds[@]}"
     foreachcmdparallel "${parallel_cleanup_cmds[@]}"
