@@ -3,7 +3,6 @@
 rootdir=`dirname "$(readlink -f "$0")"`
 . ${rootdir}/../general/boilerplate.sh
 
-base=mainline
 start_pref=begin
 username_pref=taitza
 remote_repo=share
@@ -26,7 +25,6 @@ foreachcmdparallel() {
 
 checkout() {
     local checkout_cmds=(
-        "git co ${base}"
         "git branch ${start_pref}/${feature}"
         "git branch ${username_pref}/${feature}"
         # don't co -b because want co to succeed even in branch already exists
@@ -41,7 +39,6 @@ checkout() {
 
 cleanup() {
     local cleanup_cmds=(
-      "git co ${base}"
       "git branch -d ${start_pref}/${feature}"
       "git branch -d ${username_pref}/${feature}"
     )
