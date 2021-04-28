@@ -1,5 +1,5 @@
 # click on link in windows, open in linux guest browser
-1. run remotebrowsedaemon (can do this by editing remotebrowse.service and placing it in /etc/systemd/system)
+1. run remotebrowsedaemon (can do this by editing remotebrowse.service and placing it in /etc/systemd/system, systemctl start .., systemctl enable ..)
 1. copy remote-browser.bat to c:\tmp
 1. select a browser that won't be used in windows (e.g.firefox)
 1. change default apps Web browser to firefox
