@@ -1,0 +1,12 @@
+[Unit]
+Description=listen for requests to open urls locally
+
+[Service]
+User=<put-linux-username-here>
+Environment="XAUTHORITY=/home/<username>/.Xauthority"
+Environment="DISPLAY=:1"
+Type=simple
+ExecStart=/home/<username>/src/handy-bash/remotebrowse/remotebrowsedaemon
+
+[Install]
+WantedBy=multi-user.target
