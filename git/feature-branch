@@ -4,7 +4,6 @@ rootdir=`dirname "$(readlink -f "$0")"`
 . ${rootdir}/../general/boilerplate.sh
 
 start_pref=begin
-username_pref=taitza
 remote_repo=share
 
 foreachcmd() {
@@ -26,12 +25,12 @@ foreachcmdparallel() {
 checkout() {
     local checkout_cmds=(
         "git branch ${start_pref}/${feature}"
-        "git branch ${username_pref}/${feature}"
+        "git branch ${feature}"
         # don't co -b because want co to succeed even in branch already exists
-        "git co ${username_pref}/${feature}"
+        "git co ${feature}"
     )
     local parallel_checkout_cmds=(
-        "git push --set-upstream ${remote_repo} ${username_pref}/${feature}"
+        "git push --set-upstream ${remote_repo} ${feature}"
     )
     foreachcmd "${checkout_cmds[@]}"
     foreachcmdparallel "${parallel_checkout_cmds[@]}"
@@ -40,10 +39,10 @@ checkout() {
 cleanup() {
     local cleanup_cmds=(
       "git branch -d ${start_pref}/${feature}"
-      "git branch -d ${username_pref}/${feature}"
+      "git branch -d ${feature}"
     )
     local parallel_cleanup_cmds=(
-        "git push -d ${remote_repo} ${username_pref}/${feature}"
+        "git push -d ${remote_repo} ${feature}"
         "git push -d ${remote_repo} ${start_pref}/${feature}"
     )
     foreachcmd "${cleanup_cmds[@]}"
