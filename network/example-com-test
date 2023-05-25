@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl 93.184.216.34 -H host:example.com
