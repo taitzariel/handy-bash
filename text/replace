@@ -18,8 +18,7 @@ replace() {
     local replacement=$2
     local tmpfile=/tmp/foo
     for i in `grep -r "$regexp" -l`; do
-      cat $i | sed "s/$regexp/$replacement/g" > $tmpfile
-      mv $tmpfile $i
+      sed -i "s/$regexp/$replacement/g" $i
     done
   else
     usage $0
